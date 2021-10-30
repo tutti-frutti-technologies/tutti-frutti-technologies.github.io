@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible"
+          content="ie=edge">
+
+    <meta name="description"
+          content="">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon"
+          href="/apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <style>
+        html {
+            font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace;
+            background-color: #fefefe;
+            color: #454545;
+            font-size: 30px;
+            margin: 2em auto;
+            max-width: 8000px;
+            padding: 1em;
+            line-height: 1.4;
+            /*text-align: justify;*/
+        }
+        .content {
+            position: absolute;
+            left: 50%;
+            top: 80%;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+<div id='welcome'
+     class="'content"> [*] TuttiFrutti Technologies ...<span id='loading'></span></div>
+
+</p>
+<script>
+    function flip(c) {
+        let diff = 0
+        if (c >= 'a' && c <= 'z') {
+            diff = -32
+        } else if (c >= 'A' && c <= 'Z') {
+            diff = 32
+        }
+
+        let f = String.fromCharCode(c.charCodeAt(0) + diff)
+        return f
+    }
+    let welcome = document.getElementById('welcome')
+    let pos = 0;
+    function setCharAt(str, index, chr) {
+        if (index > str.length - 1) return str;
+        return str.substring(0, index) + chr + str.substring(index + 1);
+    }
+
+    function walk() {
+        let f = () => {
+            let curr = welcome.innerHTML[pos]
+            if (curr == '<') {
+                while (welcome.innerHTML[pos++] != '>') {
+                }
+                pos++
+            }
+            walk()
+            if (pos >= welcome.innerHTML.length) {
+                pos = 0
+                return
+            }
+
+            if (pos > 0) {
+                let prev = welcome.innerHTML
+                welcome.innerHTML = setCharAt(prev, pos - 1, flip(prev[pos - 1]));
+            }
+            let c = welcome.innerHTML
+            welcome.innerHTML = setCharAt(c, pos, flip(c[pos]));
+            pos++
+        }
+        setTimeout(f, 100)
+    }
+
+    let loadPos = 0
+    let loadChars = ['|', '/', '-', '\\', '|', '/', '-', '\\']
+
+    function loading() {
+        let f = () => {
+            if (loadPos >= loadChars.length) {
+                loadPos = 0
+            }
+            let l = document.getElementById('loading')
+            l.innerHTML = loadChars[loadPos++]
+            loading()
+        }
+        setTimeout(f, 100)
+    }
+
+    loading()
+    walk()
+</script>
+</body>
+</html>
